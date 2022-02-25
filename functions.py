@@ -52,8 +52,8 @@ def verify(q1, q2, adj, arr):
     Returns
     -------
     1-d array
-        Array containing for each answer whether it verifies 
-        the utterance.
+        Array containing for each set of answers
+        whether it verifies the utterance.
     """
     
     arr = np.array(arr)
