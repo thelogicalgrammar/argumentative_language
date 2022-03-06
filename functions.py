@@ -117,7 +117,7 @@ def get_and_clean_data():
     raw_data = pd.read_csv('data_raw.csv')
     
     data = raw_data[[
-        'condition', 'response', 'row_number', 'trial_name'
+        'condition', 'response', 'row_number', 'trial_name', 'prolific_id'
     ]]
     
     data = (
@@ -188,6 +188,12 @@ def get_and_clean_data():
         ' were excluded because literally false'
     )
     data = data.iloc[index_literally_true]
+    
+    # record the index of the participant
+    _, participant_id = np.unique(data['prolific_id'], return_inverse=True)
+    data['id'] = participant_id
+    data = data.drop('prolific_id', axis=1)
+    
     return raw_data, data, possible_observations, possible_utterances
 
 
