@@ -9,7 +9,6 @@ import xarray as xr
 
 
 def save_model_and_trace(name, model, trace):
-    
     try:
         os.makedirs(f'models_traces/{name}')
     except OSError as e:
@@ -22,14 +21,17 @@ def save_model_and_trace(name, model, trace):
                     
 
 def load_model_and_trace(name):
-    
     returndict = dict()
     
     with xr.open_dataset(f'models_traces/{name}/trace.nc') as ds:
         returndict['trace'] = ds
-        
-    with open(f'models_traces/{name}/model.pkl', 'rb') as openfile:
-        returndict['model'] = pickle.load(openfile)
+    
+    # NOTE: I am ignoring models for now because they are not used
+    # and loading them with pickle causes an error.
+    # They can be redefined quite simply directly in the code as needed.
+    
+    # with open(f'models_traces/{name}/model.pkl', 'rb') as openfile:
+    #     returndict['model'] = pickle.load(openfile)
     
     return returndict
 
