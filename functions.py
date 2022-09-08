@@ -6,6 +6,7 @@ import os
 import errno
 import pickle
 import xarray as xr
+import arviz as az
 
 
 def save_model_and_trace(name, model, trace):
@@ -17,14 +18,13 @@ def save_model_and_trace(name, model, trace):
     
     with open(f'models_traces/{name}/model.pkl', 'wb') as openfile:
         pickle.dump(model, openfile)
+        
     trace.to_netcdf(f'models_traces/{name}/trace.nc')
                     
 
 def load_model_and_trace(name):
     returndict = dict()
-    
-    with xr.open_dataset(f'models_traces/{name}/trace.nc') as ds:
-        returndict['trace'] = ds
+    returndict['trace'] = az.from_netcdf(f'models_traces/{name}/trace.nc')
     
     # NOTE: I am ignoring models for now because they are not used
     # and loading them with pickle causes an error.
@@ -155,6 +155,13 @@ def get_and_clean_data():
     data = (
         data[raw_data['trial_name']=='main_trials']
         .reset_index(drop=True)
+    )
+    
+    print(
+        'a total of ' +
+        str(len(data[raw_data['trial_name'] != 'main_trials'])) +
+        ' of the raw datapoints are test trials. ' +
+        'This leaves 20 potential datapoints per participant.'
     )
     
     data['row_number'] = (
@@ -346,7 +353,7 @@ def normalize(arr, axis=1):
 
 
 def calculate_p_utterance_given_gamma(possible_utterances, possible_observations, 
-                                      utterance_observation_compatibility, gamma):
+                                      utterance_observation_compatibility, gamma, n_qs=12):
     """
     The probability of an utterance *being true* (NOT being produced) given a gamma
     To calculate it:
@@ -364,18 +371,31 @@ def calculate_p_utterance_given_gamma(possible_utterances, possible_observations
         Binomial parameter (see model description for explanation)
     Returns
     -------
-    2d array
+    array
         Array with the probability of each utterance being true
         given a gamma.
     """
+    # calculates the probability of each observation given the gamma.
+    # Dims (observation)
     p_obs_given_gamma = (
         stats.binom.pmf(
             possible_observations, 
-            n=12, 
+            n=n_qs, 
             p=gamma
         )
         .prod(-1)[None]
     )
+    
+    #### If we think that the 
+    # p_obs_given_gamma = (
+    #     gamma**possible_observations * 
+    #     (1-gamma)**(12-possible_observations)
+    # ).prod(-1)[None]
+    
+    # since exactly one observation has to be true, normalize
+    p_obs_given_gamma = normalize(p_obs_given_gamma)
+    
+    # shape (utterance)
     return (p_obs_given_gamma * utterance_observation_compatibility).sum(1)
 
 
@@ -409,7 +429,7 @@ def run_michael_method(utterance, bias, n_students=5, n_questions=12):
 
 
 def calculate_argumentative_strength(possible_utterances, possible_observations, 
-                                     gamma_prove, gamma_disprove, michael_method=True,
+                                     gamma_prove, gamma_disprove, michael_method=False,
                                      michael_kwargs=dict()):
     """
     Calculate the argumentative strength of each possible utterance given each possible state
@@ -446,18 +466,22 @@ def calculate_argumentative_strength(possible_utterances, possible_observations,
         ])
 
         return (
-            np.log(calculate_p_utterance_given_gamma(
-                possible_utterances, 
-                possible_observations, 
-                utterance_observation_compatibility, 
-                gamma_prove
-            )) -
-            np.log(calculate_p_utterance_given_gamma(
-                possible_utterances, 
-                possible_observations, 
-                utterance_observation_compatibility, 
-                gamma_disprove
-            ))
+            np.log(
+                calculate_p_utterance_given_gamma(
+                    possible_utterances, 
+                    possible_observations, 
+                    utterance_observation_compatibility, 
+                    gamma_prove
+                )
+            ) -
+            np.log(
+                calculate_p_utterance_given_gamma(
+                    possible_utterances, 
+                    possible_observations, 
+                    utterance_observation_compatibility, 
+                    gamma_disprove
+                )
+            )
         )
 
 
