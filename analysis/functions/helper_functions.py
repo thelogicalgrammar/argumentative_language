@@ -248,6 +248,29 @@ def theano_normalize(tensor, axis):
     return tensor / tt.sum(tensor, axis=axis, keepdims=True)
 
 
+def u_o_array_to_df(array, possible_observations, possible_utterances):
+    """
+    This is a function to help visualize arrays in terms
+    of actual possible_observations and possible_utterances
+    rather than just indices.
+
+    Parameters
+    ----------
+    array: 2d array
+        Dimensions (possible utterances, possible observations)
+    Returns
+    -------
+    df
+        A df with the possible utterances as rows
+        and the possible observations as columns.
+    """
+    return pd.DataFrame(
+        array,
+        index=['|'.join(u) for u in possible_utterances],
+        columns=[str(o) for o in possible_observations]
+    )
+
+
 def theano_calculate_pragmatic_speaker(p_observation_given_utterance, 
                                        costs, alpha, 
                                        beta=None, argumentative_strengths=None):

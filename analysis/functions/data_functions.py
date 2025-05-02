@@ -3,6 +3,7 @@ import numpy as np
 from itertools import product
 from functions.helper_functions import verify
 
+
 def get_and_clean_data_exp1(pathdata='data_raw.csv'):
     """
     This functions works for the pilot and exp1

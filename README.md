@@ -14,11 +14,14 @@ This repository contains the code, data, and analysis for a research project inv
 
 - **analysis/**  
   Jupyter notebooks and supporting code for modeling and analyzing the experimental data:
-  - `explorative.ipynb`: Initial analyses and model exploration.
-  - `analysis_fixedarray.ipynb`: Analysis for pilot and Experiment 1.
-  - `analysis_variablearray.ipynb`: Analysis for Experiment 2.
+  - `analysis_pilot_exp1.ipynb`: Analysis for pilot and Experiment 1.
+  - `analysis_exp2.ipynb`: Analysis for Experiment 2.
+  - `argstrengths.ipybn`: Visualization and comparison of argstrengths, also vis a vis the data.
+  - `tests_and_designs.ipybn`: Various tests, plots, etc., that didn't naturally fit anywhere else.
+  - `excluded_models.ipynb`: Models that were considered but didn't make it to the preregistration. This was cleaned up fairly quickly from a previous version, so some things might be slightly broken.
   - `functions/`: Python functions used in the notebooks.
   - `environment.yml`: Conda environment for reproducibility.
+
 
 - **experiments/**  
   Implementation of the main experiment using [magpie](https://magpie-experiments.org/), a framework for running web-based behavioral experiments.  
