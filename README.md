@@ -7,8 +7,8 @@ This repository contains the code, data, and analysis for a research project inv
 - **data/**  
   Contains datasets from three experiments:
   1. A pilot study for model exploration.
-  2. Experiment 1: N=80 participants, fixed matrix size (5 students × 12 questions).
-  3. Experiment 2: N=120 participants, variable matrix sizes.
+  2. Experiment 1: fixed matrix size (5 students × 12 questions).
+  3. Experiment 2: variable matrix sizes.
   
   Also includes `data-exploration.r` for data wrangling and plotting.
 
@@ -20,7 +20,7 @@ This repository contains the code, data, and analysis for a research project inv
   - `functions/`: Python functions used in the notebooks.
   - `environment.yml`: Conda environment for reproducibility.
 
-- **experiments/speaker_side/**  
+- **experiments/**  
   Implementation of the main experiment using [magpie](https://magpie-experiments.org/), a framework for running web-based behavioral experiments.  
   - To run locally:
     1. Install Node.js (v14.x, 16.x, 18.x, or 20.x) and npm (≥7.0.0).
