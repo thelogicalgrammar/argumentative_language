@@ -87,7 +87,7 @@ sum_stats_full |>
   theme_csp() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggsave("pics/barplot_responses_example12|12|9|3|3.pdf", width = 8, height = 4.5, scale = 1)
+ggsave("pics/barplot_responses_example-12-12-9-3-3.pdf", width = 8, height = 4.5, scale = 1)
 
 ## regression models ----
 
