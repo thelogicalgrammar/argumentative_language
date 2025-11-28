@@ -106,7 +106,7 @@
 				The <b>teacher</b> wants the exam to sound <b>easy</b>.
 			<br/><br/>
 				The <b>principal</b> provides an <b>objective</b> report.
-			<br/>
+			<br/><br/>
 			Your task is to decide <b>who</b> said the report.
 			<br/><br/>
 			<button @click="$magpie.nextScreen()">Next</button>
@@ -177,11 +177,17 @@ function normalizeItems(rawItems) {
         ? row.Q1.charAt(0).toUpperCase() + row.Q1.slice(1)
         : row.Q1;
 
+	const A =
+      typeof row.A === "string" && row.A.length > 0
+        ? row.A.endsWith(".")
+          ? row.A
+          : row.A + "."
+        : row.A;
     return {
       id: row.id != null ? row.id : idx,
       Q1: Q1,
       Q2: row.Q2,
-      A: row.A,
+      A: A,
       condition: row.condition,
       observation: obs,
     };
