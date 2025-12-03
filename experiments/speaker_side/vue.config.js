@@ -19,8 +19,5 @@ module.exports = {
     lintStyleOnBuild: false,
     stylelint: {}
   },
-  publicPath:
-    process.env.NODE_ENV === 'production' && process.env.REPO_NAME
-      ? '/' + process.env.REPO_NAME + '/'
-      : '/'
+  publicPath: '/argumentative_language/experiments/speaker_side/',
 };
